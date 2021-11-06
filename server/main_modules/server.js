@@ -14,10 +14,10 @@ function init() {
         console.log('A user has connected');
         var player = new Player(startingMass);
         players.push(player);
+        socket.on('disconnect', () => {
+            players.splice(players.indexOf(player), 1);
+        })
         socket.on('tick', (data) => {
-            quickSortRecursive(players, 0, players.length-1);
-            console.log(players);
-
             if(food.length < foodCount){
                 var dF = foodCount - food.length;
                 var f = new Food();
@@ -75,8 +75,7 @@ function init() {
 
                 for(var p of players){
                     if(p.uuid === player.uuid) continue;
-
-                    for(var pcell of players){
+                    for(var pcell of p.cells){
                         if(cell.mass*1.25 > pcell.mass) {
                             var dx = cell.x - pcell.x;
                             var dy = cell.y - pcell.y;
@@ -87,7 +86,7 @@ function init() {
                                 p.killCell();
 
                                 if(p.cells.length <= 0){
-                                    p.kill();
+                                    p.kill(startingMass);
                                 }
                             }
                         }
@@ -102,11 +101,16 @@ function init() {
                         if(Math.pow(dx,2) + Math.pow(dy,2) < Math.pow(dmass,2)){
                             // two cells not of same player have collided
                             cell.mass += 0.75 * f.mass;
+                            player.mass += 0.75 * f.mass;
                             f.kill();
                         }
                     }
                 }
             }
+
+            quickSortRecursive(players, 0, players.length-1);
+            quickSortRecursive(player.cells, 0, player.cells.length-1);
+
             socket.emit('tock', { border, player, food, players });
         });
     });

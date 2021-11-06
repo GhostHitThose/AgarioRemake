@@ -11,14 +11,22 @@ class Player {
         this.stroke = stroke;
         this.mass = startingMass;
         this.cells = [new Cell(this.mass + Math.floor(Math.random() * (border - this.mass)), this.mass + Math.floor(Math.random() * (border - this.mass)), this.mass, this.color, this.stroke)];
-        this.uuidv4 = uuidv4();
+        this.uuid = uuidv4();
     }
 
     killCell(cell){
-        this.cells.splice(cells.indexOf(cell), 1);
+        this.cells.splice(this.cells.indexOf(cell), 1);
     }
-    kill(){
-        constructor(this.startingMass);
+    kill(startingMass){
+        const { color, stroke } = getColors();
+        this.color = color;
+        this.stroke = stroke;
+        this.mass = startingMass;
+        this.cells = [new Cell(this.mass + Math.floor(Math.random() * (border - this.mass)), this.mass + Math.floor(Math.random() * (border - this.mass)), this.mass, this.color, this.stroke)];
+    }
+
+    split(){
+        // TODO
     }
 }
 
