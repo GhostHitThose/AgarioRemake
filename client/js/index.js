@@ -1,0 +1,2 @@
+initCanvas();
+initServer();
